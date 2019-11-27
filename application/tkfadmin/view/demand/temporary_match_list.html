@@ -1,0 +1,98 @@
+<style type="text/css">
+  .layui-card:last-child{
+    margin-bottom: auto;
+  }
+</style>
+<div style="display: flex; margin-bottom: 2em; ">
+  <div class="layui-card" style="margin-right: 2em;">
+    <div class="layui-card-header" style="text-align: center;">匹配数量</div>
+    <div class="layui-card-body" style="height: 3em;display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center;justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center;">
+        <font style="font-size: 30px">{$match_amount}</font>
+    </div>
+  </div>
+  <div class="layui-card" style="margin-right: 2em;">
+    <div class="layui-card-header" style="text-align: center;">交易个数</div>
+    <div class="layui-card-body" style="height: 3em;display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center;justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center;">
+        <font style="font-size: 30px">{$match_transaction_num}</font>
+    </div>
+  </div>
+</div>
+<div class="layui-card">
+  <div class="layui-card-header">
+    临时匹配列表 <button class="layui-btn layui-btn-xs" onclick="finishMatch()">完成匹配</button>
+  </div>
+  <div class="layui-card-body">
+    <table class="layui-table" lay-size="sm">
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>购买用户</th>
+            <th>购买需求ID</th>
+            <th>出售用户</th>
+            <th>出售需求ID</th>
+            <th>数量</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+          {volist name="list" id="vo"}
+            <tr>
+              <td>{$vo.buy_user_name}</td>
+              <td>{$vo.buy_did}</td>
+              <td>{$vo.sell_user_name}</td>
+              <td>{$vo.sell_did}</td>
+              <td>{$vo.amount}</td>
+              <td>
+                <div class="layui-btn-group">
+                  <button class="layui-btn layui-btn-sm" onclick="updateIsLock('{$vo.sell_did}', 2)">
+                    <span>重新匹配卖家</span>
+                  </button>
+                  <button class="layui-btn layui-btn-sm" onclick="updateIsLock('{$vo.buy_did}', 2)">
+                    <span>重新匹配买家</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {/volist}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+  // 完成匹配
+  function finishMatch() {
+    layer.confirm('确定完成', {
+      btn: ['确定','取消'] //按钮
+    },function(){
+      $.post('{:url('demand/finish_match')}',function(data){
+        if(data.code == 1){
+          layer.msg(data.msg);
+          history.back();
+        }else{
+          layer.msg(data.msg);
+        }        
+      });
+    });
+  }
+
+  function updateIsLock(id, is_lock){
+    layer.confirm('确定这样做吗？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        $.post('{:url('demand/update_demand_lock_state')}',{
+          demand_id:id, is_lock
+        },function(data){
+          layer.close(index);
+          console.log(data);
+          layer.msg(data.msg);
+          refresh();
+        })
+      });
+  }
+</script>

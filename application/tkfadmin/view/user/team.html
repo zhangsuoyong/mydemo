@@ -1,0 +1,248 @@
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('User/invite')}');">团队体系</a>
+            <!-- <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >用户列表</a> -->
+        </div>
+    </fieldset>
+
+    <div class="layui-card-header">
+        <div>
+            <span class="pull-left">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">关键字</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="sub_keywords" name="keywords" value="{$keywords ? $keywords : '';}"  placeholder="ID/商户编号/姓名/账号">
+                            </div>
+                            <div class="layui-input-inline">
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="selectsub" ><i class="layui-icon layui-icon-search"></i>查询</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+        </div>
+    </div>
+
+    <style type="text/css">
+        .tree {
+            min-height:20px;
+            padding:19px;
+            margin-bottom:20px;
+            background-color:#fbfbfb;
+            border:1px solid #999;
+            -webkit-border-radius:4px;
+            -moz-border-radius:4px;
+            border-radius:4px;
+            -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+        }
+        .tree ul {
+            margin-left: 25px;
+        }
+        .tree li {
+            list-style-type:none;
+            margin:0;
+            padding:10px 5px 0 5px;
+            position:relative
+        }
+        .tree li::before, .tree li::after {
+            content:'';
+            left:-20px;
+            position:absolute;
+            right:auto
+        }
+        .tree li::before {
+            border-left:1px solid #999;
+            bottom:50px;
+            height:100%;
+            top:0;
+            width:1px
+        }
+        .tree li::after {
+            border-top:1px solid #999;
+            height:20px;
+            top:25px;
+            width:25px
+        }
+        .tree li span {
+            -moz-border-radius:5px;
+            -webkit-border-radius:5px;
+            border:1px solid #999;
+            border-radius:5px;
+            display:inline-block;
+            padding:3px 8px;
+            text-decoration:none
+        }
+        .tree li.parent_li>span {
+            cursor:pointer
+        }
+        .tree>ul>li::before, .tree>ul>li::after {
+            border:0
+        }
+        .tree li:last-child::before {
+            height:30px
+        }
+        .tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
+            background:#eee;
+            border:1px solid #94a0b4;
+            color:#000
+        }
+        .add_color{
+            color: #dddddd;
+        }
+        .dj{color:#FF5722;}
+        .member_id{color:#01AAED;}
+    </style>
+
+    <div class="main-content" style="margin-left: 0">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <div class="panel-body" >
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>会员ID {$uid} </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td scope="row" style="text-align: left">
+                                        <div class="tree well">
+                                            {notempty name="list"}
+                                            {volist name="list" id="vo"}
+                                            {if condition="$vo.is_parent eq 0"}
+                                            <ul>
+                                                <li class="parent_li" >
+                                                                    <span data="{$vo.id}" dj="1" onclick="span_click($(this));">
+                                                                        <i class="fa fa-folder-open"></i>
+                                                                        <font class="dj">顶级</font> /
+                                                                        <font class="member_id" >{$vo.nickname} ({$vo.id})</font>
+                                                                    </span>
+                                                </li>
+                                            </ul>
+                                            {else/}
+                                            <ul>
+                                                <li>
+                                                                    <span>
+                                                                        <i class="fa fa-folder-open" dj="1" style="color:#d2d2d2;"></i>
+                                                                        <font class="dj">顶级</font> /
+                                                                        <font class="member_id">{$vo.nickname} ({$vo.id})</font>
+                                                                    </span>
+                                                </li>
+                                            </ul>
+                                            {/if}
+                                            {/volist}
+                                            {else /}
+                                            没有内容
+                                            {/notempty}
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use('form', function(){
+        let form = layui.form;
+        form.on('submit(selectsub)', function(data){
+            let keywords = $('#sub_keywords').val();//关键字
+            reload("?keywords="+keywords);
+            return false;
+        });
+    });
+    $(function(){
+        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', '点击隐藏子级');
+        $('.tree li.parent_li > span').off('click').on('click', function () {
+            let children = $(this).parent('li.parent_li').find(' > ul > li');
+            if(children.is(":visible")){
+                children.hide();
+                $(this).attr('title', '点击展开子级').find(' > i').addClass('fa-plus-circle').removeClass('fa-minus-circle');
+            }else{
+                children.show();
+                $(this).attr('title', '点击隐藏子级').find(' > i').addClass('fa-minus-circle').removeClass('fa-plus-circle');
+            }
+        });
+    });
+    function span_click(obj){
+        obj.removeAttr("onclick");
+        let id = obj.attr('data');
+        let dj = Number(obj.attr('dj'))+1;
+        let that = obj.parent();
+        if(obj.find('> i').hasClass('fa-plus-circle')){
+            obj.attr('title', '点击隐藏子级').find(' > i').addClass('fa-minus-circle').removeClass('fa-plus-circle')
+        }
+        $.post("{:url('/tkfadmin/user/team_list')}",{id},function(data){
+            for(let i of data){
+                if(i.is_parent == 0){
+                    if(that.find('ul').first().length === 0){
+                        that.append(
+                            '<ul>'+
+                            '<li class="parent_li">'+
+                            '<span data="'+i.id+'" dj="'+dj+'" onclick="span_click($(this));">'+
+                            '<i class="fa fa-plus-circle"></i> '+
+                            '<font class="dj">'+dj+'级</font> /'+
+                            '<font class="member_id"> '+i.nickname+' ('+i.id+') </font>'+
+                            '</span>&nbsp;&nbsp;'+
+                            '</li>'+
+                            '</ul>');
+                    }else{
+                        that.find('ul').first().append(
+                            '<li class="parent_li">'+
+                            '<span data="'+i.id+'" dj="'+dj+'" onclick="span_click($(this));">'+
+                            '<i class="fa fa-plus-circle" ></i> '+
+                            '<font class="dj">'+dj+'级</font> /'+
+                            '<font class="member_id"> '+i.nickname+' ('+i.id+') </font>'+
+                            '</span>&nbsp;&nbsp;'+
+                            '</li>');
+                    }
+                }else{
+                    if(that.find('ul').first().length === 0){
+                        that.append(
+                            '<ul>'+
+                            '<li>'+
+                            '<span dj="'+dj+'">'+
+                            '<i class="fa fa-leaf"></i> '+
+                            '<font class="dj">'+dj+'级</font> /'+
+                            '<font class="member_id"> '+i.nickname+' ('+i.id+') </font>'+
+                            '</span>&nbsp;&nbsp;'+
+                            '</li>'+
+                            '</ul>');
+                    }else{
+                        that.find('ul').first().append(
+                            '<li>'+
+                            '<span dj="'+dj+'">'+
+                            '<i class="fa fa-leaf"></i> '+
+                            '<font class="dj"> '+dj+'级</font> /'+
+                            '<font class="member_id"> '+i.nickname+' ('+i.id+') </font>'+
+                            '</span>&nbsp;&nbsp;'+
+                            '</li>');
+                    }
+                }
+            }
+            $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', '点击隐藏子级');
+            $('.tree li.parent_li > span').off('click').on('click', function () {
+                let children = $(this).parent('li.parent_li').find(' > ul > li');
+                if (children.is(":visible")) {
+                    children.hide();
+                    $(this).attr('title', '点击展开子级').find(' > i').addClass('fa-plus-circle').removeClass('fa-minus-circle');
+                } else {
+                    children.show();
+                    $(this).attr('title', '点击隐藏子级').find(' > i').addClass('fa-minus-circle').removeClass('fa-plus-circle');
+                }
+            });
+        });
+    }
+</script>

@@ -1,0 +1,108 @@
+<form class="layui-form" method="post" action="notice_update.html">
+    <input type="hidden" name='id' value="{$list.id}">
+    <div class="layui-form-item" style="width:600px">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" required value="{$list['title']}" lay-verify="required" placeholder="请输入标题"
+                   autocomplete="off" class="layui-input" style="width:600px">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">封面</label>
+        <img src="{$list['picname']}" id="imgi" width="100px" height="100px">
+        <input type="hidden" name="img" id="img" value="">
+        <button type="button" class="layui-btn" id="test1">
+            <i class="layui-icon">&#xe67c;</i>上传图片
+        </button>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-block">
+      <textarea id="demo" name="content" lay-verify="content" type="text/plain">
+          {$list['content']}
+      </textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    layui.use(['form', 'layedit', 'upload'], function () {
+        var form = layui.form
+            , layedit = layui.layedit;
+        layedit.set({
+            //暴露layupload参数设置接口 --详细查看layupload参数说明
+            uploadImage: {
+                url: "{:url('information/add_pic')}" //接口url
+                , type: 'post' //默认post
+            },
+            uploadVideo: {
+                url: "{:url('information/add_video')}",
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: '20480'
+            },
+            tool: [
+                'html', 'code', 'strong', 'italic', 'underline', 'del', '|', 'fontFomatt', 'colorpicker', 'face'
+                , '|', 'left', 'center', 'right', '|', 'link', 'image_alt', 'video'
+
+            ],
+            height: '90%'
+        });
+        var index = layedit.build('demo', {height: 500}); //建立编辑器
+        layedit.getContent(index);
+        form.render();
+        form.verify({
+            content: function () {
+                return layedit.sync(index);
+            }
+        });
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            , url: "{:url('information/add_pic')}" //接口url
+            , type: 'post'
+            , done: function (res) {
+                console.log(res);
+                if (res.code == 1) {
+                    $('#img').val(res.data.src)
+                    $('#imgi').attr('src',res.data.src)
+                } else {
+                    alert(res.data.msg);
+                }
+            }
+            , error: function () {
+            }
+        });
+
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: "{:url('information/notice_update')}",
+                method: 'post',
+                data: data.field,
+                success: function (res) {
+                    if (res.code = '1') {
+                        layer.msg(res.msg);
+                        refresh();
+                        layer.closeAll();
+                    } else
+                        alert(res.msg);
+                },
+                error: function (data) {
+                    alert('网络异常');
+                }
+            });
+
+        });
+
+    });
+</script>

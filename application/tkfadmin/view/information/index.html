@@ -1,0 +1,103 @@
+<div class="layui-card">
+  <fieldset class="layui-elem-field">
+    <div class="layui-field-box">
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >资讯列表</a>
+    </div>
+  </fieldset>
+  <div class="layui-card-header">
+    <div class="layui-form">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <div class="layui-input-inline">
+            <input class="layui-input" name="keyword" type="text" required lay-verify="required"
+                   value="{$keyword ? $keyword : '';}" placeholder="标题">
+          </div>
+          <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+          </div>
+
+        </div>
+        <span class="pull-right">
+        <button class="layui-btn layui-btn-sm" onclick="add('{:url('information/notice_add')}','添加资讯')">
+          <i class="layui-icon">&#xe608;</i> 添加资讯
+        </button>
+      </span>
+      </div>
+    </div>
+
+  </div>
+  <div class="layui-card-body">
+    <table class="layui-table" lay-size="sm">
+      <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <td>标题</td>
+           <td>封面</td>
+          <td>状态</td>
+          <td>创建时间</td>
+          <td>更改时间</td>
+          <td>操作</td>
+        </tr>
+      </thead>
+      <tbody>
+      {if count($list) gt 0}
+        {volist name="list" id="vo"}
+          <tr>
+            <td>{$vo.title}</td>
+             <td><img src="{$vo.picname}" width="100px" height="100px"></td>
+            <td>
+                    {eq name="vo.state" value="1"}
+                    <button class="layui-btn layui-btn-primary layui-btn-xs" title="显示(点击更改为隐藏)" onclick="config('{:url('information/state')}','{$vo.id}',2,'修改状态')">
+                        显示
+                    </button>
+                    {else/}
+                    <button class="layui-btn layui-btn-primary layui-btn-xs" title="隐藏(点击更改为显示)" onclick="config('{:url('information/state')}','{$vo.id}',1,'修改状态')" style="color:#FF5722;">
+                        隐藏
+                    </button>
+                    {/eq}
+                </td>
+            <td>{$vo.create_time}</td>
+            <td>{$vo.update_time}</td>
+            <td>
+              <div class="layui-btn-group">
+                <div class="layui-btn-group">
+                  <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="edit('{:url('information/notice_edit')}','{$vo.id}')">
+                    <i class="layui-icon">&#xe642;</i>
+                  </button>
+                  <button class="layui-btn layui-btn-primary layui-btn-sm" title="删除" onclick="del('{:url('information/notice_del')}','{$vo.id}')">
+                    <i class="layui-icon" style="color: red">&#xe640;</i>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {/volist}
+        {else}
+        <tr>
+          <td colspan="11" style="text-align: center">暂无数据</td>
+        </tr>
+        {/if}
+      </tbody>
+    </table>
+    {$list->render()}
+  </div>
+</div>
+<script>
+  page_load();
+  layui.use('form', function () {
+    let form = layui.form;
+    form.on('submit(selectsub)', function (data) {
+      let user = data.field.keyword;
+      if (user != '') {
+        reload('/tkfadmin/information/index.html?keyword=' + user);
+      }
+      return false;
+    });
+  });
+</script>

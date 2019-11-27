@@ -1,0 +1,44 @@
+html,body {  font-size:14px; color: #fff;   font-family: PingFangSC-Regular, sans-serif;}
+body{min-height: 100%;}
+.hover{ opacity: .8; }
+.flex-wrap{ display: -webkit-box;	display: -webkit-flex;	display: flex; }
+.flex-con{     -webkit-box-flex: 1;     -webkit-flex: 1;    flex: 1;}
+.flex-vertical{ -webkit-box-orient: vertical;-webkit-flex-flow: column;flex-flow: column;}
+.border-t,
+.border-b{ position:relative;  }
+.border-t:before,
+.border-b:after{     content: '';     position: absolute;     left: 0;  top:0;     background: #ddd;   right:0;    height: 1px;     -webkit-transform: scaleY(0.5);             transform: scaleY(0.5);     -webkit-transform-origin: 0 0;             transform-origin: 0 0; }
+.border-b:after{ top:auto; bottom:0;  }
+#wrap{ height: 100%; }
+/*重置*/
+*{margin:0;padding:0;}
+ul li,ol li{list-style: none;}
+a{text-decoration: none;}
+.fl{float: left;}
+.fr{float: right;}
+.cl:after{content: "";height: 0;display: block;overflow: hidden;clear: both;}
+.highlight { opacity: 0.7;}
+.topblack{background-color: #f2f2f2;padding-top:1px;}
+.disabled {pointer-events: none;cursor: default;opacity: 0.3;}
+/*顶部样式*/
+.ttop{width:100%;height:50px;background-color:#020202;z-index: 100;position: fixed;top:0px;}
+.ttop img{height:24px;position: absolute;left:2vw;top:13px;}
+.ttop p{line-height: 50px;text-align: center;color:#fff; font-size:16px;}
+.zhanweifu1{
+  background:url(../image/zhanweifu2.png) no-repeat 50% 50%;
+  background-size: 30% auto;
+  background-color: #eee;
+}
+.zhanweifu2{
+  background:url(../image/rentou.png) no-repeat 50% 50%;
+  background-size: 30% auto;
+  background-color: #eee;
+}
+input{
+  outline:none;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+[v-cloak] {
+				  display: none;
+	}

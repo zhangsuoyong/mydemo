@@ -1,0 +1,230 @@
+<style>
+    .classname {
+        background: #FFD393;
+    }
+
+    .layui-table tbody tr:hover {
+        background: #FFD393;
+        cursor: pointer;
+    }
+</style>
+
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();">用户列表</a>
+        </div>
+    </fieldset>
+    <!--  <div class="layui-card-header">
+
+     </div> -->
+    <div class="layui-card-body">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="id" type="text"
+                               value="{$id ? $id : '';}" placeholder="ID">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="user" type="text"
+                               value="{$user ? $user : '';}" placeholder="账号">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="nickname" type="text"
+                               value="{$nickname ? $nickname : '';}" placeholder="昵称">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="real_name" type="text"
+                               value="{$real_name ? $real_name : '';}" placeholder="真实姓名">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="phone" type="text"
+                               value="{$phone ? $phone : '';}" placeholder="联系电话">
+                    </div>
+                    <div class="layui-input-inline">
+                                <select name="is_lock">
+                                    <option value="" selected>请选择</option>
+                                    <option value="2">未冻结</option>
+                                    <option value="1">已冻结</option>
+                                </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+                    </div>
+                </div>
+                <span class="pull-right">
+                       <button class="layui-btn layui-btn-sm"
+                               onclick="config('{:url('/tkfadmin/user/truc_ticket')}','','','一键清空天使券')">
+               清空天使券
+            </button>
+            <button class="layui-btn layui-btn-sm"
+                    onclick="add('{:url('/tkfadmin/user/add')}','添加用户')">
+              <i class="layui-icon">&#xe608;</i> 添加用户
+            </button>
+          </span>
+            </div>
+        </div>
+        <table class="layui-table" lay-size="sm" style="white-space: nowrap">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>账号</td>
+                <td>昵称</td>
+                <td>推荐人</td>
+                <td>团队领导人</td>
+                <td>真实姓名</td>
+                <td>联系电话</td>
+                <td>是否激活</td>
+                <td>是否有效会员</td>
+                <td>等级</td>
+                <td>强制等级</td>
+                <td>自由积分</td>
+                <td>冻结积分</td>
+                <td>排单币</td>
+                <td>激活码</td>
+                <td>奖金</td>
+                   <td>可提现次数</td>
+                <td>通证</td>
+                <td>天使券</td>
+                <td>总提供帮助金额</td>
+                <td>总接受帮助金额</td>
+                <td>邀请码</td>
+                <td>是否冻结</td>
+                <td>提现开关</td>
+                <td>创建时间</td>
+                <td>激活时间</td>
+                <td>账号类别</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {if count($list) gt 0}
+            {volist name="list" id="vo"}
+            <tr>
+                <td>{$vo.id}</td>
+                <td onclick="dian(this)">{$vo.user}</td>
+                <td>{$vo.nickname}</td>
+                <td>{$vo.pid.msg} ({if $vo.pid.name}{$vo.pid.name}{else}'暂无'{/if})</td>
+                <td>{$vo.tid.msg} ({if $vo.tid.name}{$vo.tid.name}{else}'暂无'{/if})</td>
+                <td>{$vo.real_name}</td>
+                <td>{$vo.phone}</td>
+                <td>
+                    {if $vo.state.value eq 2}
+                    <a onclick="config('{:url('activation')}','{$vo.id}','{$vo.state.value}','激活状态')" class="layui-btn layui-btn-primary layui-btn-xs">{$vo.state.msg}</a>
+                    {/if}
+                    {if $vo.state.value neq 2}
+                    {$vo.state.msg}
+                    {/if}
+                </td>
+                <td>{$vo.yz_state}</td>
+                <td>{$vo.level.msg}</td>
+                <td><a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs"
+                       onclick="edit('{:url('tkfadmin/user/edit_qzlevel')}','{$vo.id}','修改个人强制等级')">{$vo.qz_level.msg}</a>
+                </td>
+                <td>{$vo.account.pos}</td>
+                <td>{$vo.account.pow}</td>
+                <td>{$vo.account.buy_coin}</td>
+                <td>{$vo.account.action_coin}</td>
+                <td>{$vo.account.point}</td>
+                  <td>{$vo.account.pri_account}</td>
+                <td>{$vo.account.pass_card}</td>
+                <td>{$vo.account.ticket}</td>
+                <td>{$vo.provide_num}</td>
+                <td>{$vo.receive_num}</td>
+                <td>{$vo.invite}</td>
+                <td>
+                    <a onclick="config('{:url('state')}','{$vo.id}','{$vo.is_lock.value}','冻结状态')"
+                       href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">{$vo.is_lock.msg}</a>
+                </td>
+                <td>
+                    <a onclick="config('{:url('is_cash')}','{$vo.id}','{$vo.if_cash.value}','提现状态')"
+                       href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">{$vo.if_cash.msg}</a>
+                </td>
+                <td>{$vo.create_time}</td>
+                <td>{$vo.update_time}</td>
+                <td>{$vo.ident.msg}</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm"
+                            onclick="edit('{:url('tkfadmin/user/edit')}','{$vo.id}','编辑用户支付信息')">
+                        <i class="layui-icon">&#xe642;</i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm"
+                            onclick="edit('{:url('tkfadmin/user/edit_login')}','{$vo.id}','修改登陆密码')">
+                        <i class="layui-icon">&#xe612;</i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm"
+                            onclick="edit('{:url('tkfadmin/user/edit_pay')}','{$vo.id}','修改支付密码')">
+                        <i class="layui-icon">&#xe612;</i>
+                    </button>
+                    <button title="团队体系" class="layui-btn layui-btn-primary layui-btn-sm"
+                            onclick="reload('{:url(\'user/team\',[\'id\'=>$vo.id])}');">
+                        <i class="layui-icon">&#xe613;</i></i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" title="充值"
+                            onclick="reload('{:url(\'capital/index\',[\'id\'=>$vo.id])}');">
+                        <i class="layui-icon">&#xe654;</i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm " title="资产日志"
+                            onclick="reload('{:url(\'capital/detail\',[\'id\'=>$vo.id])}');">
+                        <i class="fa fa-cny"></i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm " title="操作手册"
+                            onclick="reload('{:url(\'user/log\',[\'id\'=>$vo.id])}');">
+                        <i class="fa fa-file-text"></i>
+                    </button>
+
+                </td>
+            </tr>
+            {/volist}
+            {else}
+            <tr>
+                <td colspan="30" style="text-align: center">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        {$list->render()}
+    </div>
+</div>
+
+<script type="text/javascript">
+    page_load()
+    layui.use('form', function () {
+        let form = layui.form;
+        form.render();
+        form.on('submit(selectsub)', function (data) {
+            let id = data.field.id;
+            let user = data.field.user;
+            let nickname = data.field.nickname;
+            let real_name = data.field.real_name;
+            let phone = data.field.phone;
+            let is_lock=data.field.is_lock;
+            reload('/tkfadmin/user/index.html?user=' + user+'&id='+id+'&nickname='+nickname+'&real_name='+real_name+'&phone='+phone+'&is_lock='+is_lock);
+            return false;
+        });
+    });
+
+    function dian(now) {
+        console.log();
+        if ($(now).parent().hasClass('classname')) {
+            $(now).parent().removeClass('classname')
+        } else {
+            $(now).parent().addClass('classname')
+        }
+        // if(i==1){
+        //     $(now).parent().css("background",'#FFD393')
+        //     i=0
+        // }else {
+        //     $(now).parent().css("background","#fff")
+        //     i=1
+        // }
+    }
+</script>

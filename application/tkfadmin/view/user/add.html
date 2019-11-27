@@ -1,0 +1,76 @@
+<form class="layui-form" method="post" action="insert.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap">用户类别</label>
+        <div class="layui-input-block">
+            <select id="ident" name="ident" lay-filter="test">
+                <option value='1'>普通用户</option>
+                <option value='2'>团队领导人</option>
+                <option value='3'>平台用户</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="user" required lay-verify="required" placeholder="请输入用户" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-block">
+            <input type="text" name="nickname" required lay-verify="required" placeholder="请输入昵称" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap">二级密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="paypassword" required lay-verify="required" placeholder="请输入密码"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div id="invitediv" class="layui-form-item">
+        <label class="layui-form-label" style="white-space: nowrap">邀请码</label>
+        <div class="layui-input-block">
+            <input id="invite" type="text" name="invite"  placeholder="请输入邀请码"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.on('select(test)', function (data) {
+            var ident = $('#ident').val();
+            if (ident == 1) {
+                $('#invitediv').show();
+            } else {
+                $('#invite').val('');
+                $('#invitediv').hide();
+            }
+        });
+        form.on('submit(*)', function (data) {
+            return post(data.form);
+        });
+    });
+</script>

@@ -1,0 +1,28 @@
+<form class="layui-form" method="post" action="/tkfadmin/user/update_level.html" style="white-space: nowrap">
+    <input type="hidden" name="id" value="{$id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">个人等级</label>
+        <div class="layui-input-inline" autocomplete="off">
+            <select name="level">
+                {foreach $list as $k=>$vo}
+                <option value="{$k}" {if $level eq $k}selected{/if}>{$vo}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.on('submit(*)', function (data) {
+            return post(data.form);
+        });
+    });
+</script>

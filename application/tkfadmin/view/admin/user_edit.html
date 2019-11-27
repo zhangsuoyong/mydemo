@@ -1,0 +1,36 @@
+<form class="layui-form" method="post" action="user_update.html" >
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色</label>
+    <div class="layui-input-block">
+      <select name="roleid" lay-verify="required">
+        {if condition="$user['roleid'] eq 0"}
+          <option value='0'>--请选择--</option>
+            {volist name="role" id="vo"}
+              <option value="{$vo.id}">{$vo.name}</option> 
+            {/volist}
+        {else/}
+            {volist name="role" id="vo"}
+              <option value="{$vo.id}" {if condition="$vo['id'] eq $user['roleid']"}checked{/if}>{$vo.name}</option> 
+            {/volist}
+        {/if}
+        
+      </select>
+    </div>
+  </div>
+  <input type="hidden" name='id' value="{$user['id']}">
+  <div class="layui-form-item">
+    <div class="layui-input-block">     
+      <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+<script> 
+layui.use('form', function(){
+  var form = layui.form;  
+  form.render();
+  form.on('submit(*)', function(data){
+    return post(data.form);
+  });
+});
+</script>

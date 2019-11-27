@@ -1,0 +1,281 @@
+<div class="layui-form">
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <div class="layui-input-inline">
+        <input class="layui-input" name="id" type="text"
+               value="{$id ? $id : '';}" placeholder="需求id">
+      </div>
+      <div class="layui-input-inline">
+        <input class="layui-input" name="user" type="text"
+               value="{$user ? $user : '';}" placeholder="用户账号">
+      </div>
+      <div class="layui-input-inline">
+        <input class="layui-input" name="nickname" type="text"
+               value="{$nickname ? $nickname : '';}" placeholder="昵称">
+      </div>
+      <div class="layui-input-inline">
+        <input class="layui-input" name="real_name" type="text"
+               value="{$real_name ? $real_name : '';}" placeholder="真实姓名">
+      </div>
+      <div class="layui-input-inline">
+        <input type="text" name="start" class="layui-input" placeholder="开始时间" id="start" autocomplete="off">
+      </div>
+      <div class="layui-input-inline">
+        <input type="text" name="end" class="layui-input" placeholder="结束时间" id="end" autocomplete="off">
+      </div>
+      <div class="layui-input-inline">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+      </div>
+    </div>
+  </div>
+</div>
+<blockquote class="layui-elem-quote" style="background: #FFFFFF;">
+  出售数量: <font id="sell_count">{$sell_count}</font>,购买数量: <font id="buy_count">{$buy_count}</font>
+</blockquote>
+<div class="layui-tab layui-tab-card">
+  <ul class="layui-tab-title" style="margin-bottom: 0px;">
+   {if condition="$item == 0"}
+    <li class="layui-this">出售</li>
+    <li >购买</li>
+    {else/}
+    <li >出售</li>
+    <li class="layui-this">购买</li>
+    {/if}
+  </ul>
+  <div class="layui-tab-content" style="background: #FFFFFF;">
+         {if condition="$item eq 0"}
+    <div class="layui-tab-item layui-show" >
+      {else}
+       <div class="layui-tab-item" >
+      {/if}
+      <table class="layui-table" lay-size="sm">
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>用户账号</th>
+            <th>用户昵称</th>
+            <th>用户真实姓名</th>
+            <th>类型</th>
+            <th>数量</th>
+            <th>剩余</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {volist name="sell_list" id="vo"}
+            <tr>
+              <td>{$vo.id}</td>
+              <td>{$vo.user_user}</td>
+              <td>{$vo.user_name}</td>
+              <td>{$vo.user_real_name}</td>
+              <td>
+                {switch name="vo.type.value"}
+                  {case value="1"}
+                    <font style="color: blue;">{$vo.type.msg}</font>
+                  {/case}
+                  {case value="2"}
+                    <font style="color: red;">{$vo.type.msg}</font>
+                  {/case}
+                {/switch}
+                {if condition="$vo.demand_num"}
+                  ({$vo.demand_num})
+                {/if}
+                {if condition="$vo.day != null"}
+                  ({$vo.day})
+                {/if}
+              </td>
+              <td>{$vo.amount}</td>
+              <td>{$vo.amount - ($vo.on_amount + $vo.lock_amount)}</td>
+              <td>
+                {switch name="vo.state.value"}
+                  {case value="0"}
+                    <font style="color: #cecece;">{$vo.state.msg}</font>
+                  {/case}
+                  {case value="1"}
+                    <font style="color: blue;">{$vo.state.msg}</font>
+                  {/case}
+                  {case value="2"}
+                    <font style="color: red;">{$vo.state.msg}</font>
+                  {/case}
+                {/switch}
+              </td>
+              <td>{$vo.create_time}</td>
+              <td>
+                <div class="layui-btn-group">
+                  <button class="layui-btn layui-btn-primary layui-btn-sm"
+                  onclick="open_page('{:url('demand/choose_match')}', '匹配', {'amount': '{$vo.amount}','buy_did': 0, 'sell_did': {$vo.id}, 'uid': {$vo.uid} })">
+                    <span>选择匹配</span>
+                  </button>
+                  <button class="layui-btn layui-btn-primary layui-btn-sm"
+                  onclick="selBuyOpen('{$vo.amount}', {$vo.id}, {$vo.uid})
+                  ">
+                    <span>搜索匹配</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {/volist}
+        </tbody>
+      </table>
+      <div id="demo6" ></div>
+    </div>
+        {if condition="$item eq 1"}
+    <div class="layui-tab-item layui-show">
+      {else}
+          <div class="layui-tab-item">
+      {/if}
+      <table class="layui-table" lay-size="sm" >
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>用户账号</th>
+            <th>用户昵称</th>
+            <th>用户真实姓名</th>
+            <th>类型</th>
+            <th>数量</th>
+            <th>剩余数量</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+         {volist name="buy_list" id="vo"}
+            <tr>
+              <td>{$vo.id}</td>
+              <td>{$vo.user_user}</td>
+              <td>{$vo.user_name}</td>
+              <td>{$vo.user_real_name}</td>
+              <td>
+                {switch name="vo.type.value"}
+                  {case value="1"}
+                    <font style="color: blue;">{$vo.type.msg}</font>
+                  {/case}
+                  {case value="2"}
+                    <font style="color: red;">{$vo.type.msg}</font>
+                  {/case}
+                {/switch}
+                ({$vo.genre.msg})
+                {if condition="$vo.demand_num"}
+                  ({$vo.demand_num})
+                {/if}
+                {if condition="$vo.day != null"}
+                  ({$vo.day})
+                {/if}
+              </td>
+              <td>{$vo.amount}</td>
+              <td>{$vo.amount - ($vo.on_amount + $vo.lock_amount)}</td>
+              <td>
+                {switch name="vo.state.value"}
+                  {case value="0"}
+                    <font style="color: #cecece;">{$vo.state.msg}</font>
+                  {/case}
+                  {case value="1"}
+                    <font style="color: blue;">{$vo.state.msg}</font>
+                  {/case}
+                  {case value="2"}
+                    <font style="color: red;">{$vo.state.msg}</font>
+                  {/case}
+                {/switch}
+              </td>
+              <td>{$vo.create_time}</td>
+              <td>{$vo.update_time}</td>
+              <td>
+                <div class="layui-btn-group">
+                  <button class="layui-btn layui-btn-primary layui-btn-sm"
+                  onclick="open_page('{:url('demand/choose_match')}', '匹配', {'amount': '{$vo.amount}', 'buy_did': {$vo.id}, 'sell_did': 0, 'uid': {$vo.uid} })">
+                    <span>匹配</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {/volist}
+        </tbody>
+      </table>
+        <div id="demo7" ></div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+ layui.use('laypage',function(){
+    var laypage=layui.laypage;
+  laypage.render({
+    elem: 'demo7',
+    curr:"{$page}",
+    limit:100
+    ,count: "{$buycount}"
+    ,layout: ['count', 'prev', 'page', 'next',  ],
+    jump:function(obj,first){
+      if(!first){
+        reload('/tkfadmin/demand/manual_match_list.html?page='+obj.curr+'&item='+1);
+      }
+     }
+    });
+
+    laypage.render({
+    elem: 'demo6',
+     curr:"{$page}",
+     limit:100
+    ,count: "{$sellcount}"
+    ,layout: ['count', 'prev', 'page', 'next',  ],
+      jump:function(obj,first){
+      if(!first){
+          reload('/tkfadmin/demand/manual_match_list.html?page='+obj.curr+'&item='+0);
+      }
+     }
+    });
+  });
+  
+  function selBuyOpen(amount, sell_did, uid) {
+
+    layer.prompt({title: `请输入用户手机号或编号`, formType: 0}, function(text, index){
+      layer.close(index);
+      open_page('{:url('demand/choose_match')}', '匹配', {amount,'buy_did': 0, sell_did, uid, user: text });
+    });
+  }
+
+  layui.use(['form', 'laydate'], function () {
+    let form = layui.form;
+    let laydate = layui.laydate;
+    form.render();
+    laydate.render({
+      elem: '#start'
+      , type: 'datetime',
+      value:"{$start}"
+    });
+    laydate.render({
+      elem: '#end'
+      , type: 'datetime',
+      value:"{$end}"
+    });
+
+
+
+    form.on('submit(selectsub)', function (data) {
+      let id = data.field.id;
+      let user = data.field.user;
+      let nickname = data.field.nickname;
+      let real_name = data.field.real_name;
+      let start = data.field.start;
+      let end = data.field.end;
+      reload('/tkfadmin/demand/manual_match_list.html?user=' + user+'&demand_id='+id+'&nickname='+nickname+'&real_name='+real_name+'&start='+start+'&end='+end);
+      return false;
+    });
+  });
+</script>

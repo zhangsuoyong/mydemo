@@ -1,0 +1,72 @@
+<div class="layui-card">
+  <fieldset class="layui-elem-field">
+  <div class="layui-field-box">
+    <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+    <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >参数配置</a>
+  </div>
+  </fieldset>
+  {volist name="list" id="vo"}
+  <div class="layui-form-item">
+    {if $vo.type eq 'number'}
+    <form class="layui-form layui-form-pane" method="post" action="{:url('system_config/update')}"  >
+      <label class="layui-form-label" style="width:270px">{$vo.msg}</label>
+      <div class="layui-input-inline" style="width:260px">
+        <input type="hidden" name='name' value="{$vo.name}">
+        <input type="{$vo.type}" name="value" value="{$vo.value}" required  lay-verify="required" placeholder="请输入{$vo.msg}" autocomplete="off" class="layui-input" >
+      </div>
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <span style="color:red">
+        <i class="layui-icon layui-icon-refresh-1">&#xe60b;</i>
+          {$vo.remark}
+      </span>
+    </form>
+    {/if}
+
+    {if $vo.type eq  'flag' }
+    <form class="layui-form layui-form-pane" method="post" action="{:url('system_config/update')}"  >
+      <label class="layui-form-label" style="width:270px">{$vo.msg}</label>
+      <div class="layui-input-inline" style="width:260px">
+        <input type="hidden" name='name' value="{$vo.name}">
+          <input type="radio" name="value" value="1"  {if $vo.value eq 1}  checked {/if} title="开" >
+          <input type="radio" name="value" value="0"  {if $vo.value eq 0}  checked {/if}  title="关">
+      </div>
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <span style="color:red">
+        <i class="layui-icon layui-icon-refresh-1">&#xe60b;</i>
+          {$vo.remark}
+      </span>
+    </form>
+    {/if}
+
+            {if $vo.type eq 'text'}
+    <form class="layui-form layui-form-pane" method="post" action="{:url('system_config/update')}"  >
+      <label class="layui-form-label" style="width:270px">{$vo.msg}</label>
+      <div class="layui-input-inline" style="width:260px">
+        <input type="hidden" name='name' value="{$vo.name}">
+        <input type="{$vo.type}" name="value" value="{$vo.value}" required  lay-verify="required" placeholder="请输入{$vo.msg}" autocomplete="off" class="layui-input" >
+      </div>
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <span style="color:red">
+        <i class="layui-icon layui-icon-refresh-1">&#xe60b;</i>
+          {$vo.remark}
+      </span>
+    </form>
+    {/if}
+  </div>
+  {/volist}
+  
+</div>
+<script>
+  //Demo
+  layui.use('form', function(){
+    var form = layui.form;
+    form.render();
+    //监听提交
+    form.on('submit(formDemo)', function(data){
+    	
+    	console.log(data);
+      return post(data.form);
+
+    });
+  });
+</script>

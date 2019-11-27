@@ -1,0 +1,29 @@
+<form class="layui-form" method="post" action="/tkfadmin/index/pass_update.html" style="margin-top: 15px;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">原密码</label>
+    <div class="layui-input-block">
+      <input type="password" name="oldpass" required  lay-verify="required" placeholder="请输入原密码" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">新密码</label>
+    <div class="layui-input-block">
+      <input type="password" name="newpass" required  lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">     
+      <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+<script> 
+layui.use('form', function(){
+  var form = layui.form;  
+  form.render();
+  form.on('submit(*)', function(data){
+    return post(data.form);
+  });
+});
+</script>

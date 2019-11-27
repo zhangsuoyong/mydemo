@@ -1,0 +1,179 @@
+<div class="layui-form" lay-filter="form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input class="layui-input" name="user" type="text" placeholder="用户名或账号或id">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="start" class="layui-input" placeholder="开始时间" id="start" autocomplete="off">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="end" class="layui-input" placeholder="结束时间" id="end" autocomplete="off">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="*">查询</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-card">
+    <div class="layui-card-header">
+        订单列表
+        <div class="layui-inline layui-layout-right" style="padding-right: 5rem">
+        <button class="layui-btn" onclick="shifang()">释放选中</button>
+            <button class="layui-btn layui-btn-danger" onclick="del_func()">取消选中</button>
+        </div>
+    </div>
+    <div class="layui-card-body">
+        <table class="layui-table" lay-size="sm">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>   <input type="checkbox"  onchange="quanxuan(this)"></th>
+                <th>id</th>
+                <th>用户账号</th>
+                <th>用户昵称</th>
+                <th>用户真实姓名</th>
+                <th>金额</th>
+                <th>收益</th>
+                <th>收益增利率</th>
+                <th>剩余天数</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="list" id="vo"}
+            <tr>
+                <td> <input class="aa" type="checkbox" name="ids" value="{$vo.id}"></td>
+                <td>{$vo.id}</td>
+                <td>{$vo.user_user}</td>
+                <td>{$vo.user_name}</td>
+                <td>{$vo.user_real_name}</td>
+                <td>{$vo.amount}</td>
+                <td>{$vo.profit}</td>
+                <td>{$vo.profit_ratio}</td>
+                <td>{$vo.day}</td>
+                <td>{$vo.state.msg}</td>
+                <td>{$vo.create_time}</td>
+                <td>{$vo.update_time}</td>
+                <td>
+                    {if $vo.state.value neq 3}
+                    {if $vo.state.value neq 4}
+                    <button class="layui-btn layui-btn-primary layui-btn-sm"
+                            onclick="test('{:url('tkfadmin/demand/order_thaw')}','{$vo.id}','1','订单释放')">
+                        <i class="layui-icon">&#xe623;</i>
+                    </button>
+                    {/if}
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+        {$list->render()}
+    </div>
+</div>
+</div>
+<script>
+    page_load();
+
+    layui.use(['form', 'laydate'], function () {
+        let form = layui.form;
+        form.render();
+        let laydate = layui.laydate;
+        form.render();
+        laydate.render({
+            elem: '#start'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#end'
+            , type: 'datetime'
+        });
+        form.val('form',{
+            'user':"{$user}",
+            'start':"{$start}",
+            'end':"{$end}"
+        });
+
+        form.on('submit(*)', function (data) {
+            let user = data.field.user;
+            let start = data.field.start;
+            let end = data.field.end;
+            reload('order_list.html?user=' + user+'&start='+start+'&end='+end);
+            return false
+        });
+    });
+    var i=0;
+    function quanxuan() {
+        if(i){
+            $("input[name=ids]").each(function (now,test) {
+                $(test).prop('checked',false);
+            });
+            i--;
+        }else {
+            $("input[name=ids]").each(function (now, test) {
+                $(test).prop("checked", 'checked');
+            });
+            i++;
+        }
+    }
+
+    function shifang() {
+        var str='';
+        $('input[name=ids]:checked').each(function (index, item) {
+            str+=','+item.value
+        });
+        $.post('{:url(\'tkfadmin/demand/order_thaw_all\')}',{id:str},function (data) {
+            if (data.code == 1) {
+                layer.msg('释放成功！');
+                refresh();
+            } else {
+                layer.msg(data['msg']);
+            }
+        })
+
+    }
+
+    function del_func() {
+        var str='';
+        $('input[name=ids]:checked').each(function (index, item) {
+            str+=','+item.value
+        });
+        console.log(str);
+        $.post('{:url(\'tkfadmin/demand/order_cancel\')}',{id:str},function (data) {
+            if (data.code == 1) {
+                layer.msg('取消释放成功');
+                refresh();
+            } else {
+                layer.msg(data['msg']);
+            }
+        })
+
+    }    
+
+    function test(url, id, state, title) {
+        layer.confirm('确定进行强制释放)！', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.post(url, {
+                id: id, state: state
+            }, function (data) {
+                if (data.code == 1) {
+                    layer.msg('更改成功！');
+                    refresh();
+                } else {
+                    layer.msg(data['msg']);
+                }
+            });
+        });
+    }
+</script>

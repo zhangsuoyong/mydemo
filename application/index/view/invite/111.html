@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="/static/home/css/style.css">
+    <style media="screen">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            background-color: #191919;
+        }
+
+        .header {
+            width: 100%;
+            padding-bottom: 0.15rem;
+        }
+
+        .register {
+            padding-top: 0.8rem;
+            padding-left: 0.175rem;
+        }
+
+        .logo {
+            width: 0.55rem;
+            height: 0.31rem;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .font {
+            color: #fff;
+            font-size: 0.18rem;
+            margin-left: 0.1rem;
+            margin-top: 0.15rem;
+            line-height: 0.18rem;
+        }
+
+        .ipt_box {
+            width: 92%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 0.2rem;
+            position: relative;
+            border-radius: 0.05rem;
+        }
+
+        .ipt_code {
+        }
+
+        .user {
+            width: 100%;
+            margin: 0.15rem auto;
+            background: rgba(0, 0, 0, 0);
+            font-size: 0.14rem;
+            line-height: 0.14rem;
+            border: none;
+            padding-left: 0.15rem;
+            box-sizing: border-box;
+            color: #fff;
+            outline: none;
+        }
+
+        .close {
+            width: 0.12rem;
+            height: 0.12rem;
+            position: absolute;
+            top: 0.16rem;
+            right: 0.15rem;
+            display: none;
+        }
+
+        .code {
+            width: 60%;
+            margin: 0.15rem auto;
+            background: rgba(0, 0, 0, 0);
+            font-size: 0.14rem;
+            line-height: 0.14rem;
+            border: none;
+            padding-left: 0.15rem;
+            box-sizing: border-box;
+            color: #fff;
+            outline: none;
+        }
+
+        .yzm {
+            font-size: 0.12rem;
+            color: #E9B961;
+            margin-right: 0.15rem;
+            line-height: 0.45rem;
+        }
+
+        .btn {
+            width: 92%;
+            margin: 0 auto;
+            line-height: 0.44rem;
+            margin-top: 0.4rem;
+            text-align: center;
+            border-radius: 0.05rem;
+            color: #FFFFFF;
+            font-size: 0.14rem;
+            background: linear-gradient(#FFDC97, #E6B458)
+        }
+
+        .log {
+            text-align: center;
+            color: #E9B961;
+            font-size: 0.12rem;
+            position: absolute;;
+            bottom: 0.3rem;
+            width: 100%;
+        }
+
+        /*登录*/
+        .denglu{
+            width:100%;
+            line-height:0.44rem;
+            background-color: #323f97;
+            color:#fff;
+            border-radius: 0.1rem;
+            font-size:0.15rem;
+            text-align: center;
+            margin-top:0.45rem;
+        }
+    </style>
+    <script>
+        var window_width = window.innerWidth;
+        var font_size = parseFloat(window_width / 3.75);
+        var ele = document.getElementsByTagName("html")[0]
+        ele.style.fontSize = font_size + "px";
+    </script>
+</head>
+
+<body>
+<div id="app" style="position:relative;">
+
+
+    <div class="header">
+        <!-- 头部注册logo -->
+        <div class="register cl">
+            <div class="logo fl">
+                <img src="/static/home/image/logo.png" alt="">
+            </div>
+            <p class="font fl">
+                注册CTK账号
+            </p>
+        </div>
+    </div>
+
+    <div class="ipt_box">
+        <input type="text" class="user" placeholder="请输入手机或邮箱账号" v-model="user">
+        <img src="/static/home/image/close.png" alt="" class="close" tapmode="light">
+    </div>
+    <div class="ipt_box ipt_code cl">
+        <input type="text" class="code" placeholder="请输入验证码" v-model="code">
+        <span class="yzm fr" id="yzm" tapmode="light" onclick="sendemail()">获取验证码</span>
+    </div>
+
+    <div class="ipt_box">
+        <input type="text" class="user" placeholder="请输入昵称" v-model="nickname">
+    </div>
+
+    <div class="ipt_box">
+        <input type="password" class="user" placeholder="请输入6-16位登录密码" v-model="password">
+    </div>
+
+    <div class="ipt_box">
+        <input type="password" class="user" placeholder="请输入6-16位二级密码" v-model="paypassword">
+    </div>
+
+    <div class="ipt_box">
+        <input type="text" class="user" placeholder="请输入您的邀请码" v-model="invite" readonly >
+    </div>
+
+    <div class="btn" tapmode="light" onclick="gdata()">
+        注册
+    </div>
+
+    <div class="btn" tapmode="light" onclick="download()" style="margin-top:10px;background:#2aabd2">
+        下载APP
+    </div>
+
+
+</div>
+</body>
+<script type="text/javascript" src="/static/home/script/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/static/home/script/layui/lay/modules/layer.js"></script>
+<script type="text/javascript" src="/static/home/script/vue.min.js"></script>
+<script type="text/javascript" src="/static/home/script/reset.js"></script>
+<script>
+    var appdata = new Vue({
+        el: "#app",
+        data: {
+            user: "",
+            password: "",
+            paypassword: "",
+            invite: "",
+            code: "",
+            nickname: "",
+        }
+    });
+    $(function () {
+      if(getQueryVariable('invite')){
+          appdata.invite=getQueryVariable('invite');
+      }
+    });
+
+
+    function download() {
+        window.location.href="https://fir.im/djur";
+    }
+    function gdata() {
+        var data = {
+            user: RSA(appdata.user),
+            password: RSA(appdata.password),
+            paypassword: RSA(appdata.paypassword),
+            code: RSA(appdata.code),
+            nickname: RSA(appdata.nickname),
+            invite: RSA(appdata.invite)
+        };
+        $.ajax({
+            url: "/api/login/register",
+            type: "post",
+            data: data,
+            success: function (data) {
+                if (data.code == 1) {
+                    layer.msg('注册成功,请先下载app后登陆');
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function (e) {
+                layer.msg('网络错误');
+            }
+        });
+    }
+
+
+    function sendemail() {
+        var obj = $("#yzm");
+        $.ajax({
+            url: "/api/login/yzm",
+            type: "post",
+            data: {user:RSA(appdata.user),flag:RSA(1+'')},
+            success: function (data) {
+                if (data.code == 1) {
+                    layer.msg('发送成功');
+                    settime(obj);
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function (e) {
+                layer.msg('网络错误');
+            }
+        });
+
+    }
+    var countdown = 60;
+    function settime(obj) { //发送验证码倒计时
+        if (countdown == 0) {
+            obj.attr("onclick", 'sendemail()')
+            obj.text("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            obj.attr("onclick", '')
+            obj.text("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function () {
+                settime(obj)
+            }
+            , 1000)
+    }
+
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
+
+</script>
+</html>

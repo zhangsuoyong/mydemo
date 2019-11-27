@@ -1,0 +1,109 @@
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();">轮播图列表</a>
+        </div>
+    </fieldset>
+    <div class="layui-card-body">
+        <div class="layui-form" lay-filter="test">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="id" type="text"
+                               value="{$id ? $id : '';}" placeholder="ID">
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="type" lay-verify="test">
+                            <option value="1" {if $type eq 1}selected{
+                            /if}>公告</option>
+                            <option value="2" {if $type eq 2}selected{
+                            /if}>链接</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="content" type="text"
+                               value="{$content ? $content : '';}" placeholder="标题">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+                    </div>
+                </div>
+                <span class="pull-right">
+            <button class="layui-btn layui-btn-sm"
+                    onclick="add('{:url('/tkfadmin/slide/add')}','轮播图添加')">
+              <i class="layui-icon">&#xe608;</i> 轮播图添加
+            </button>
+          </span>
+            </div>
+        </div>
+        <table class="layui-table" lay-size="sm" style="white-space: nowrap">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>类型</td>
+                <td>关联ID或跳转地址</td>
+                <td>公告名称</td>
+                <td>图片</td>
+                <td>状态</td>
+                <td>创建时间</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {if count($list) gt 0}
+            {volist name="list" id="vo"}
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.type.msg}</td>
+                <td>{$vo.content.value}</td>
+                <td>{$vo.content.msg}</td>
+                <td><img src="{$vo.picname}" style="width: 100px;height: 100px"></td>
+                <td>
+                    <a onclick="config('{:url('state')}','{$vo.id}','{$vo.state.value}','轮播图状态','Slide','state','{:url('base/is_node')}')"
+                       href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">{$vo.state.msg}</a>
+                </td>
+                <td>{$vo.create_time}</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm"
+                            onclick="edit('{:url('tkfadmin/slide/edit')}','{$vo.id}','编辑轮播图','Slide','edit','{:url('base/is_node')}')">
+                        <i class="layui-icon">&#xe642;</i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" title="删除"
+                            onclick="del('{:url('/tkfadmin/slide/del')}','{$vo.id}','Slide','del','{:url('base/is_node')}')">
+                        <i class="layui-icon" style="color: red">&#xe640;</i>
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {else}
+            <tr>
+                <td colspan="11"><h2>暂无数据</h2></td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        {$list->render()}
+    </div>
+</div>
+<script type="text/javascript">
+    page_load();
+    layui.use('form', function () {
+        let form = layui.form;
+        form.render();
+        form.on('submit(selectsub)', function (data) {
+            let id = data.field.id;
+            let type = data.field.type;
+            let content = data.field.content;
+            url = '/tkfadmin/slide/index.html?id=' + id + '&type=' + type + '&content=' + content;
+            reload(url);
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,47 @@
+<form class="layui-form" method="post" action="/tkfadmin/slide/update.html" style="white-space: nowrap">
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <select name="type" lay-filter="leixing">
+                <option value="1" {if $info.type.value eq 1} selected="" {
+                /if}>公告</option>
+                <option value="2" {if $info.type.value eq 2} selected="" {
+                /if}>链接</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{if $info.type.value eq 1}对应id{else}链接地址{/if}</label>
+        <div class="layui-input-block">
+            <input type="text" name="content" lay-verify="title" value="{$info.content.value}" autocomplete="off"
+                   placeholder="请输入对应ID" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">新图片</label>
+        <div class="layui-input-block">
+            <input type="file" name="pic" style="padding-left: 10px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原图片</label>
+        <div class="layui-input-block">
+            <img src="{$info.picname}" width="80" style="padding-left: 10px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.on('submit(*)', function (data) {
+            return post(data.form);
+        });
+    });
+</script>

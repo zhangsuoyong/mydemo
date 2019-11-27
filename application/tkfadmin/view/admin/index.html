@@ -1,0 +1,57 @@
+<div class="layui-card">
+  <fieldset class="layui-elem-field">
+    <div class="layui-field-box">
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >管理员列表</a>
+    </div>
+  </fieldset>
+  <div class="layui-card-header">
+    <div>
+      <span class="pull-left">
+        <button class="layui-btn layui-btn-sm" onclick="add('{:url('admin/user_add')}','管理员添加','Admin','user_add','{:url('base/is_node')}')">
+          <i class="layui-icon">&#xe608;</i> 管理员添加
+        </button>
+      </span>
+    </div>
+  </div>
+  <div class="layui-card-body">
+    <table class="layui-table" lay-size="sm">
+      <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <td>ID</td>
+          <td>用户</td>
+          <td>角色</td>
+          <td>创建时间</td>
+          <td>操作</td>
+        </tr> 
+      </thead>
+      <tbody>
+        {volist name="list" id="vo"}
+          <tr>
+            <td>{$vo.id}</td>
+            <td>{$vo.username}</td>
+            <td>{if condition="$vo.name eq ''"}超级管理员{else/}{$vo.name}{/if}</td>
+            <td>{$vo.create_time}</td>
+            <td>
+              <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="edit('{:url('admin/user_edit')}','{$vo.id}','编辑管理员','Admin','user_edit','{:url('base/is_node')}')">
+                  <i class="layui-icon">&#xe642;</i>
+                </button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" title="删除" onclick="del('{:url('admin/user_del')}','{$vo.id}','Admin','user_del','{:url('base/is_node')}')">
+                  <i class="layui-icon" style="color: red">&#xe640;</i>
+                </button>            
+              </div>
+            </td>
+          </tr>
+        {/volist}
+      </tbody>
+    </table>
+    {$list->render()}
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<blockquote class="layui-elem-quote" style="background: #FFFFFF;">
+  出售数量: <font id="sell_count">{$sell_count}</font>
+</blockquote>
+<div class="layui-tab layui-tab-card">
+  <ul class="layui-tab-title" style="margin-bottom: 0px;">
+    <li class="layui-this">出售</li>
+  </ul>
+  <div class="layui-tab-content" style="background: #FFFFFF;">
+    <div class="layui-tab-item layui-show" >
+      <table class="layui-table" lay-size="sm">
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>用户账号</th>
+            <th>用户昵称</th>
+            <th>用户真实姓名</th>
+            <th>数量</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {volist name="sell_list" id="vo"}
+            <tr>
+              <td>{$vo.id}</td>
+              <td>{$vo.sell_user_user}</td>
+              <td>{$vo.sell_user_name}</td>
+              <td>{$vo.sell_user_real_name}</td>
+              <td>{$vo.amount}</td>
+              <td>
+                {switch name="vo.is_qg"}
+                  {case value="0"}
+                    <font style="color: black;">未抢购</font>
+                  {/case}
+                  {case value="1"}
+                    <font style="color: blue;">已完成抢购</font>
+                  {/case}
+                  {case value="2"}
+                    <font style="color: gainsboro;">已取消抢购</font>
+                  {/case}
+                {/switch}
+              </td>
+              <td>{$vo.create_time}</td>
+              <td>
+                {if $vo.is_qg eq 0}
+                <div class="layui-btn-group">
+                  {if $vo.is_show eq 0}
+                  <button class="layui-btn layui-btn-primary layui-btn-sm" title="在抢单大厅展示" onclick="config('{:url('/tkfadmin/demand/on_home')}','{$vo.id}','','抢单大厅展示')">
+                    <i class="layui-icon" >&#xe68e;</i>
+                  </button>
+                  {else}
+                  <button class="layui-btn layui-btn-primary layui-btn-sm" title="撤回订单" onclick="config('{:url('/tkfadmin/demand/on_home')}','{$vo.id}','','撤回订单')">
+                    <i class="layui-icon" >&#x1007;</i>
+                  </button>
+                  {/if}
+                  <button class="layui-btn layui-btn-primary layui-btn-sm"
+                          onclick="config('{:url('/tkfadmin/demand/cancel_qg')}','{$vo.id}','','取消抢单')">
+                    <span>取消抢单</span>
+                  </button>
+                </div>
+                {/if}
+              </td>
+            </tr>
+          {/volist}
+        </tbody>
+      </table>
+        <div id="demo7" ></div>
+    </div>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  layui.use('laypage',function(){
+    var laypage=layui.laypage;
+  laypage.render({
+    elem: 'demo7',
+    curr:"{$page}",
+    limit:100
+    ,count: "{$allcount}"
+    ,layout: ['count', 'prev', 'page', 'next',  ],
+    jump:function(obj,first){
+      if(!first){
+        reload('/tkfadmin/demand/manual_match_list_q.html?page='+obj.curr);
+      }
+     }
+    });
+});
+</script>

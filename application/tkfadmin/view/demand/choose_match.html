@@ -1,0 +1,124 @@
+<table class="layui-table" lay-size="sm">
+  <colgroup>
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>订单参考ID</th>
+      <th>用户</th>
+      <th>类型</th>
+      <th>状态</th>
+      <th>数量</th>
+      <th>剩余数量</th>
+      <th>冻结状态</th>
+      <th>添加时间</th>
+      <th>操作</th>
+    </tr> 
+  </thead>
+  <tbody>
+    {volist name="list" id="vo"}
+      <tr>
+        <td>
+          {$vo.id}
+        </td>
+        <td>{$vo.demand_id}</td>
+        <td>
+          {$vo.user_name}
+          {if condition="$vo.user_lock eq 1"}
+            <font style="color: red;">[已锁定]</font>
+          {/if}
+        </td>
+        <td>
+          {switch name="vo.type.value" }
+            {case value="1"}<font style="color: #FFB800;">{$vo.type.msg}</font>{/case}
+            {case value="2"}<font style="color: #01AAED;">{$vo.type.msg}</font>{/case}
+          {/switch}
+          ({$vo.genre.msg})
+          {if condition="$vo.demand_num"}
+            ({$vo.demand_num})
+          {/if}
+          {if condition="$vo.day != null"}
+            ({$vo.day})
+          {/if}
+        </td>
+        <td>
+          {switch name="vo.state.value" }
+            {case value="3"}<font style="color: #cecece;">{$vo.state.msg}</font>{/case}
+            {case value="1"}<font style="color: #FFB800;">{$vo.state.msg}</font>{/case}
+            {case value="2"}<font style="color: #01AAED;">{$vo.state.msg}</font>{/case}
+          {/switch}
+        </td>
+        <td>{$vo.amount}</td>
+        <td>{$vo.amount - ($vo.on_amount + $vo.lock_amount)}</td>
+        <td>
+          {if condition="$vo.is_lock.value eq 1"}
+            <font style="color: red;">{$vo.is_lock.msg}</font>
+            {else/}
+            <font >{$vo.is_lock.msg}</font>
+          {/if}
+        </td>
+        <td>{$vo.create_time}</td>
+        <td>
+          <button class="layui-btn layui-btn-primary layui-btn-sm" 
+           onclick="oneMatch({$vo.id})">
+            <span>完成匹配</span> 
+          </button>
+        </td>
+      </tr>
+    {/volist}
+  </tbody>
+</table>
+<script type="text/javascript">
+  function oneMatch(demandId) {
+    let buyDid = '{$buyDid}';
+    let sellDid = '{$sellDid}';
+
+    if(buyDid > 0) {
+      layer.confirm('确定完成', {
+        btn: ['确定','取消'] //按钮
+      },function(){
+        $.post('{:url('demand/choose_finish_match')}', {
+          buy_did: buyDid, sell_did: demandId
+        },function(data){
+          if(data.code == 1){
+            layer.msg(data.msg);
+            layer.closeAll();
+            refresh();
+          }else{
+            layer.msg(data.msg);
+          }        
+        });
+      });   
+    }
+
+    if(sellDid > 0) {
+      type={$type};
+      amount={$amount};
+      transaction_id={$transaction_id};
+      layer.confirm('确定完成', {
+        btn: ['确定','取消'] //按钮
+      },function(){
+        $.post('{:url('demand/choose_finish_match')}', {
+          buy_did: demandId, sell_did: sellDid,type:type, amount:amount,transaction_id:transaction_id,
+        },function(data){
+          if(data.code == 1){
+            layer.closeAll();
+            refresh();
+          }else{
+            layer.msg(data.msg);
+          }        
+        });
+      });   
+    }
+  }
+</script>

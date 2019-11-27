@@ -1,0 +1,152 @@
+﻿{extend name="public:base"}
+{block name="title"}ctk-后台管理{/block}
+{block name="head"}
+<script src="/static/admin/js/index.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/index.css">
+{/block}
+{block name="content"}
+<div id="top" calss="">
+    <span class="pull-left">
+    </span>
+    <span class="pull-right">
+      <button class="layui-btn layui-btn-sm" onclick="
+        location.href = '{:url('index/index')}'
+      " title="刷新重新载入页面">
+        重载
+      </button>
+      <button class="layui-btn layui-btn-sm" onclick="add('{:url('admin/pass')}')">
+        <font>修改密码</font>
+      </button>
+      <button class="layui-btn layui-btn-sm layui-btn-warm" onclick="reload('{:url('admin/user_log')}')">
+        <font>操作日志</font>
+      </button>
+      <a class="layui-btn layui-btn-sm layui-btn-danger" href="{:url('login/out')}">安全退出</a>
+    </span>
+</div>
+<div id="left_menu">
+    <div id="up">
+        <div class="index_top_nav">
+            <font id="title">ctk</font>
+            <font id="user-name">管理员: {$data.username}</font>
+        </div>
+        <ul class="layui-nav layui-nav-tree" lay-filter="left-nav">
+            <li class="layui-nav-item">
+                <a id="home" href="{:url('index/home')}">首页</a>
+            </li>
+			{if $data.roleid eq 0}
+            <li class="layui-nav-item">
+                <a href="javascript:;">管理员</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('admin/index')}">管理员列表</a></dd>
+                    <dd><a href="{:url('role/role_list')}">角色管理</a></dd>
+                    <dd><a href="{:url('admin/log')}">操作日志</a></dd>
+                </dl>
+            </li>
+			{/if}
+            <li class="layui-nav-item">
+                <a href="javascript:;">用户管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('user/index')}">用户列表</a></dd>
+                    <dd><a href="{:url('user/getInactiveUser')}">不活跃用户列表</a></dd>
+                </dl>
+            </li>
+				{if $data.roleid eq 0}
+            <li class="layui-nav-item">
+                <a href="javascript:;">资产管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('capital/index')}">充值资产</a></dd>
+                    <dd><a href="{:url('capital/detail')}">资产日志</a></dd>
+                    <dd><a href="{:url('capital/ptdetail')}">平台资产日志</a></dd>
+                </dl>
+            </li>
+			{/if}
+            <li class="layui-nav-item">
+                <a href="javascript:;">订单管理</a>
+                <dl class="layui-nav-child">
+                	<dd><a href="{:url('Demand/robot_list')}">自动排单列表</a></dd>
+                	<dd><a href="{:url('Demand/robotLogs_list')}">自动排单日志列表</a></dd>
+                    <dd><a href="{:url('demand/demand_list')}">需求列表</a></dd>
+                    <dd><a href="{:url('demand/transaction_list')}">交易列表</a></dd>
+                    <dd><a href="{:url('demand/order_list')}">释放列表</a></dd>
+                    <dd><a href="{:url('demand/manual_match_list')}">手动匹配列表</a></dd>
+                    <dd><a href="{:url('demand/match_list')}">匹配列表</a></dd>
+                    <dd><a href="{:url('demand/match_part')}">匹配池</a></dd>
+                    <dd><a href="{:url('demand/manual_match_list_q')}">可抢单列表</a></dd>
+                    <dd><a href="{:url('demand/capital_list')}">提本金审核列表</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">轮播图管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('slide/index')}">轮播图列表</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">公告管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('notice/index')}">公告列表</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">资讯管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('information/index')}">资讯列表</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">系统配置</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('system_config/index')}">系统参数</a></dd>
+                    <dd><a href="{:url('system_config/level')}">用户等级参数</a></dd>
+                    <dd><a href="{:url('system_config/rule',['name'=>'accept_rule'])}">提供帮助规则</a></dd>
+                    <dd><a href="{:url('system_config/rule',['name'=>'receive_rule'])}">接受帮助规则</a></dd>
+                    <dd><a href="{:url('system_config/rule',['name'=>'qz_rule'])}">抢购规则</a></dd>
+                    <dd><a href="{:url('system_config/rule',['name'=>'pro_remark'])}">提供帮助备注</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">意见反馈</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('feedback/index')}">意见反馈列表</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">帮助中心</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('question/index')}">帮助中心</a></dd>
+                </dl>
+            </li>
+				{if $data.roleid eq 0}
+            <li class="layui-nav-item">
+                <a href="{:url('system_log/index')}">平台日志</a>
+            </li>
+			{/if}
+        </ul>
+    </div>
+    <div id="down">
+        <h4 class="text-center big">管理系统 </h4>
+        <h4 class="text-center">Copyright ©2018 </h4>
+        <h4 class="text-center">by 小萌熊</h4>
+    </div>
+</div>
+<script>
+    $(function () {
+        // 处理后台传过来的url,进行url定位
+        let to_url = '{$to_url}';
+        if (to_url != '' && to_url != '/admin/index/home.html') {
+            if ($("a[href='" + to_url + "']").length) {
+                $("a[href='" + to_url + "']").click();
+            } else {
+                let url = to_url.split('?');
+                $("a[href='" + url[0] + "']").click();
+                reload(to_url);
+            }
+        }
+    });
+</script>
+{/block}
+{block name="main"}
+<div id="main">
+
+</div>
+{/block}

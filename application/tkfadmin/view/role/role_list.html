@@ -1,0 +1,61 @@
+
+<div class="layui-card">
+  <fieldset class="layui-elem-field">
+    <div class="layui-field-box">
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >角色列表</a>
+    </div>
+  </fieldset>
+  <div class="layui-card-header">
+    <div>
+      <span class="pull-left">
+        <button class="layui-btn layui-btn-sm" onclick="add('{:url('role/role_add')}','角色添加','Role','role_add','{:url('base/is_node')}')">
+          <i class="layui-icon">&#xe608;</i> 角色添加
+        </button>
+      </span>
+    </div>
+  </div>
+  <div class="layui-card-body">
+    <table class="layui-table" lay-size="sm">
+      <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <td>角色名</td>
+          <td>说明</td>
+          <td>添加时间</td>
+          <td>操作</td>
+        </tr> 
+      </thead>
+      <tbody>
+        <tr>
+          <td>超级管理员</td>
+          <td>拥有所有权限</td>
+          <td>2019/2/20 10:21:39</td>
+          <td><button class="layui-btn layui-btn-dange layui-btn-sm" title="无" >
+                <i class="layui-icon">无</i>
+              </button></td>
+        </tr>
+        {volist name="list" id="vo"}
+          <tr>
+            <td>{$vo.name}</td>
+            <td>{$vo.exp}</td>
+            <td>{$vo.create_time}</td>
+            <td>
+              <button class="layui-btn layui-btn-dange layui-btn-sm" title="编辑" onclick="edit('{:url('role/role_edit')}','{$vo.id}','编辑角色','Role','role_edit','{:url('base/is_node')}')">
+                <i class="layui-icon">&#xe642;</i>
+              </button>
+              <button class="layui-btn layui-btn-warm layui-btn-sm" title="权限" onclick="reload('{:url('role/node',['id'=>$vo.id])}','Role','node','{:url('base/is_node')}')">
+                <i class="layui-icon">&#xe614;</i>
+            </td>
+          </tr>
+        {/volist}
+      </tbody>
+    </table>
+    {$list->render()}
+  </div>
+</div>

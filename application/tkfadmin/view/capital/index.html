@@ -1,0 +1,74 @@
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();">充值资产</a>
+        </div>
+    </fieldset>
+    <div class="layui-card-body">
+        <div class="layui-form" style="white-space: nowrap;" lay-filter="form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户账号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" required lay-verify="required" placeholder="用户账号" autocomplete="off"
+                           class="layui-form-mid layui-input ">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择框</label>
+                <div class="layui-input-inline">
+                    <select name="type" lay-verify="required">
+                        <option value="4">互助币</option>
+                        <option value="1">自由资产</option>
+                        <option value="5">激活码</option>
+                        <option value="3">奖金</option>
+                        <option value="6">通证</option>
+                        <option value="7">天使券</option>
+                        <option value="8">金种子</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">充值数量</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="num" required lay-verify="required" placeholder="充值数量" autocomplete="off"
+                           class="layui-form-mid layui-input ">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">增减</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sign" value="+" title="+" checked>
+                    <input type="radio" name="sign" value="-" title="-">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.val("form", {
+            "id": "{$id}",
+        });
+        form.on('submit(formDemo)', function (data) {
+            url='/tkfadmin/capital/update';
+            $.post(url, data.field, function (data) {
+                if (data.code == 1) {
+                    layer.msg(data.msg);
+                } else {
+                    layer.msg(data.err);
+                }
+            });
+        });
+    });
+
+</script>

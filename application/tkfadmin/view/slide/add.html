@@ -1,0 +1,46 @@
+<form class="layui-form" method="post" action="/tkfadmin/slide/insert.html">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <select name="type" lay-filter="leixing">
+                <option value="1">公告</option>
+                <option value="2">链接</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">跳转</label>
+        <div class="layui-input-block">
+            <input type="text" name="content" lay-verify="title" autocomplete="off" placeholder="请输入对应ID或链接地址"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" pane="">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="state" value="1" title="显示" checked="">
+            <input type="radio" name="state" value="2" title="隐藏">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">新图片</label>
+        <div class="layui-input-block">
+            <input type="file" name="pic" style="padding-left: 10px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.on('submit(*)', function (data) {
+            return post(data.form);
+        });
+    });
+</script>

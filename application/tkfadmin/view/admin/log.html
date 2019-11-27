@@ -1,0 +1,63 @@
+<div class="layui-card">
+  <fieldset class="layui-elem-field">
+    <div class="layui-field-box">
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >日志列表</a>
+    </div>
+  </fieldset>
+  <div class="layui-card-body">
+    <div class="layui-form">
+      <div class="layui-form-item">
+        <div class="layui-inline">     
+          <div class="layui-input-inline">
+            <input class="layui-input" name="keyword" type="text" required lay-verify="required" value="{$keyword ? $keyword : '';}" placeholder="关键字或管理员用户">
+          </div>    
+          <div class="layui-input-inline">        
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="*" >查询</button> 
+          </div>        
+        </div>
+      </div>
+    </div>
+    <table class="layui-table" lay-size="sm">
+      <colgroup>
+        <col >
+      </colgroup>
+      <thead>
+        <tr>
+          <td>日志</td>
+          <td>管理员</td>      
+          <td>时间</td>
+          <td>ip</td>
+          <td>请求</td>
+          <td>设备</td>
+        </tr> 
+      </thead>
+      <tbody>
+        {volist name="list" id="vo"}
+          <tr>
+            <td>{$vo.log}</td>
+            <td>{$vo.user}</td>        
+            <td>{$vo.create_time}</td>
+            <td>{$vo.ip}</td>
+            <td>{$vo.method}</td>
+            <td>{$vo.agent}</td>
+          </tr>
+        {/volist}   
+      </tbody>
+    </table>
+    {$list->render()}
+  </div>
+</div>
+<script type="text/javascript">
+  page_load();
+  layui.use('form', function(){
+    let form = layui.form;  
+    form.on('submit(*)', function(data){
+      let user = $('input[name=keyword]').val();
+      if(user != ''){
+        reload('log.html?keyword='+user);
+      }
+      return false;
+    });
+  });
+</script>

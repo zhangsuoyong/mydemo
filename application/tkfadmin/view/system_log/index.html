@@ -1,0 +1,67 @@
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <!-- <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('User/index')}');">用户列表</a> -->
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();">平台日志</a>
+        </div>
+    </fieldset>
+    <!--  <div class="layui-card-header">
+     </div> -->
+    <div class="layui-card-body">
+        <table class="layui-table" lay-size="sm">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <td>id</td>
+                <td>提供帮助金额</td>
+                <td>新增提供帮助金额</td>
+                <td>接收帮助金额</td>
+                <td>新增接收帮助金额</td>
+                <td>新增会员人数</td>
+                <td>激活会员人数</td>
+                <td>创建时间</td>
+            </tr>
+            </thead>
+            <tbody>
+            {if count($list) gt 0}
+            {volist name="list" id="vo"}
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.provide_help}</td>
+                <td>{$vo.provide_help_new}</td>
+                <td>{$vo.receive_help}</td>
+                <td>{$vo.receive_help_new}</td>
+                <td>{$vo.member}</td>
+                <td>{$vo.member_new}</td>
+                <td>{$vo.create_time}</td>
+            </tr>
+            {/volist}
+            {else}
+            <tr>
+                <td colspan="11" style="text-align: center">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        {$list->render()}
+    </div>
+</div>
+<script type="text/javascript">
+    page_load()
+    layui.use('form', function () {
+        let form = layui.form;
+        form.on('submit(selectsub)', function (data) {
+            let user = $('input[name=keyword]').val();
+            if (user != '') {
+                reload('/tkfadmin/notice/index.html?keyword=' + user);
+            }
+            return false;
+        });
+    });
+</script>

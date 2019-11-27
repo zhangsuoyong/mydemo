@@ -1,0 +1,90 @@
+  <!--面包屑导航 开始-->
+  <div class="crumb_warp">
+      <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+    <i class="fa fa-home"></i> <a href="{:url('Index/info')}">首页</a> &raquo; <a href="{:url('Role/index')}">角色列表</a>
+  </div>
+  <!--面包屑导航 结束-->
+  <div class="Assign_style">
+    <div class="border clearfix">
+      <span class="l_f">                
+        <div class="title_name">权限分配-<a onclick="refresh()" href="javascript:void(0);">{$roleres['name']}</a></div>
+      </span>
+    </div>
+      
+    <div class="Select_Competence">
+      <form action="javascript:;" method="post" onsubmit="return sub({$rid});">
+        <input type="hidden" name='rid' value="{$rid}">
+      <div class='all'><label class="middle"><input  class="ace" type="checkbox" id="id-disable-check"><span class="lbl">所有权限</span></label></div>
+        {foreach name="controller" item="cvo"}
+          <dl class="permission-list">
+            <dt><label class="middle"><input  class="ace" type="checkbox" id="id-disable-check"><span class="lbl">{$cvo.name}</span></label></dt>
+            <dd>
+              {foreach name="list" item="nvo"}
+                {eq name="nvo.cid" value="$cvo.id"}
+                  <label class="middle"><input type="checkbox" value="{$nvo.id}" class="ace" name="nids[]"{if condition="in_array($nvo['id'],$yesnode)"}checked{/if}><span class="lbl">{$nvo.name}</span></label>
+                {/eq}
+              {/foreach}
+            </dd>
+          </dl>
+        {/foreach}
+        <div class='center'>
+            <button class='btn btn-info' type="submit">提交</button>
+            <button class='btn btn-info' type="reset">重置</button>
+        </div>
+      </form>
+    </div> 
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+    /*按钮选择*/
+    $(function(){
+      $(".permission-list dt input:checkbox").click(function(){
+        $(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+      });
+      $(".all input:checkbox").click(function(){
+        $("input[type='checkbox']").prop("checked",$(this).prop("checked"));
+      });
+    });
+    function sub(rid){
+      //有权限
+      let nids = $("input[name='nids[]']:checked");//获取所有选中的input框
+      let len = nids.length;//选中的个数
+      if(len == 0){
+        layer.alert("请至少选择一项",{
+          title: '提示框',
+          icon:0,
+        });
+        return false;
+      }else{
+        let myarray = "";
+        nids.each(function(){
+          myarray += ($(this).val()+",")//所选中项的id号
+        })
+        $.ajax({
+          url:"{:url('Role/update_node')}",//请求url
+          type:"post",//请求方式
+          data:{rid:rid,nid:myarray},//传输参数 
+          async:true,//异步请求
+          dataType:"json",//返回数据格式
+          success:function(data){
+            if(data['code'] == 1){
+              layer.msg(data['msg'], {
+                  icon: 1,
+                  time: 1000 //2秒关闭（如果不配置，默认是3秒）
+              }, function(){
+                  // location.href = "{:url('Role/index')}";
+                  //layer.close(index);
+              });       
+            }else{
+                layer.msg(data['msg'], {icon: 2}); 
+            }
+          },
+          error:function(){
+              alert("网络错误！");
+          },
+        })
+      }
+      return false;
+    }
+</script>

@@ -1,0 +1,59 @@
+<form class="layui-form" method="post" action="/tkfadmin/user/update.html" style="white-space: nowrap">
+    <input type="hidden" name="id" value="{$list.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="real_name" lay-verify="title" autocomplete="off" value="{$list.name}"
+                   placeholder="真实姓名"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone" lay-verify="title" autocomplete="off" value=""
+                   placeholder="联系电话"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开户行</label>
+        <div class="layui-input-block">
+            <input type="text" name="bank_name" lay-verify="title" autocomplete="off" value=""
+                   placeholder="开户行"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">银行账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="bank_num" lay-verify="title" autocomplete="off" value=""
+                   placeholder="银行账号"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付宝</label>
+        <div class="layui-input-block">
+            <input type="text" name="alipay" lay-verify="title" autocomplete="off" value=""
+                   placeholder="支付宝"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.on('submit(*)', function (data) {
+            return post(data.form);
+        });
+    });
+</script>

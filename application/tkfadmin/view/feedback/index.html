@@ -1,0 +1,85 @@
+<div class="layui-card">
+  <fieldset class="layui-elem-field">
+    <div class="layui-field-box">
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+      <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();" >意见反馈列表</a>
+    </div>
+  </fieldset>
+  <div class="layui-card-body">
+    <div class="layui-form">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <div class="layui-input-inline">
+            <input class="layui-input" name="keyword" type="text" required lay-verify="required"
+                   value="{$keyword ? $keyword : '';}" placeholder="ID/标题">
+          </div>
+          <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="layui-table" lay-size="sm">
+      <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <td>id</td>
+          <td>用户id</td>
+          <td>用户名称</td>
+          <td>反馈内容</td>
+          <td>状态</td>
+          <td>创建时间</td>
+          <td>回复时间</td>
+          <td>操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        {if count($list) gt 0}
+        {volist name="list" id="vo"}
+          <tr>
+            <td>{$vo.id}</td>
+            <td>{$vo.uid.value}</td>
+            <td>{$vo.uid.msg}</td>
+            <td>{$vo.content}</td>
+            <td>{$vo.state.msg}</td>
+            <td>{$vo.create_time}</td>
+            <td>{$vo.update_time}</td>
+            <td>
+              <div class="layui-btn-group">
+                <div class="layui-btn-group">
+                  <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="edit('{:url('feedback/reply')}','{$vo.id}')">
+                    <i class="layui-icon">&#xe63a;</i>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {/volist}
+        {else}
+        <tr>
+            <td colspan="11" style="text-align: center">暂无数据</td>
+        </tr>
+        {/if}
+      </tbody>
+    </table>
+    {$list->render()}
+  </div>
+</div>
+<script>
+  page_load();
+  layui.use('form', function () {
+    let form = layui.form;
+    form.on('submit(selectsub)', function (data) {
+      let user = data.field.keyword;
+      if (user != '') {
+        reload('/tkfadmin/feedback/index.html?keyword=' + user);
+      }
+      return false;
+    });
+  });
+</script>

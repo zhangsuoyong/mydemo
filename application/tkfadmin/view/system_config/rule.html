@@ -1,0 +1,30 @@
+<div class="layui-form-item">
+    <form class="layui-form layui-form-pane" method="post" action="{:url('system_config/update')}"  >
+        <div class="layui-form-item layui-form-text">
+          <p><h1>{$list.msg}</h1></p>
+            <input type="hidden" name='name' value="{$list.name}">
+            <div class="layui-input-block">
+                <textarea  name="value" required  lay-verify="required"  autocomplete="off" class="layui-textarea" >{$list.value}</textarea>
+            </div>
+        </div>
+
+        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+        <span style="color:red">
+        <i class="layui-icon layui-icon-refresh-1">&#xe60b;</i>
+          {$list.msg}
+      </span>
+    </form>
+</div>
+
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render();
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            return post(data.form);
+
+        });
+    });
+</script>

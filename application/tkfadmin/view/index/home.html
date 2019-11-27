@@ -1,0 +1,317 @@
+<div id="app">
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">登陆地址</div>
+                <div class="layui-card-body">
+                    本次登陆地址{{login_ip}},上次登陆地址{{login_ip_ago}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">今日概览</div>
+                <div class="layui-card-body">
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">新增会员</div>
+                        <div class="layui-card-body">
+                            {{new_persion}} 人
+                        </div>
+                    </div>
+
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">新增激活会员</div>
+                        <div class="layui-card-body">
+                            {{new_action_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">新增提供帮助金额</div>
+                        <div class="layui-card-body">
+                            {{new_provide}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">新增接受帮助金额</div>
+                        <div class="layui-card-body">
+                            {{new_receive}}
+                        </div>
+                    </div>
+
+                    <div class="layui-card layui-inline" style="display: none">
+                        <div class="layui-card-header">新增会员</div>
+                        <div class="layui-card-body">
+                            {{new_persion}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">会员统计</div>
+                <div class="layui-card-body">
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">总会员</div>
+                        <div class="layui-card-body">
+                            {{persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已激活会员</div>
+                        <div class="layui-card-body">
+                            {{action_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">未激活会员</div>
+                        <div class="layui-card-body">
+                            {{disaction_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">冻结会员</div>
+                        <div class="layui-card-body">
+                            {{lock_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">C1级别的会员人数</div>
+                        <div class="layui-card-body">
+                            {{c1_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">C2级别的会员人数</div>
+                        <div class="layui-card-body">
+                            {{c2_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">C3级别的会员人数</div>
+                        <div class="layui-card-body">
+                            {{c3_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">C4级别的会员人数</div>
+                        <div class="layui-card-body">
+                            {{c4_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">C5级别的会员人数</div>
+                        <div class="layui-card-body">
+                            {{c5_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">C6级别的会员人数</div>
+                        <div class="layui-card-body">
+                            {{c6_persion}} 人
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline" style="display: none">
+                        <div class="layui-card-header">新增会员</div>
+                        <div class="layui-card-body">
+                            {{new_persion}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">资产统计</div>
+                <div class="layui-card-body">
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已使用自由积分</div>
+                        <div class="layui-card-body">
+                            {{pos_total}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">剩余自由积分</div>
+                        <div class="layui-card-body">
+                            {{pos}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">未释放冻结积分</div>
+                        <div class="layui-card-body">
+                            {{pow}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已使用奖金</div>
+                        <div class="layui-card-body">
+                            {{point_total}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">剩余奖金</div>
+                        <div class="layui-card-body">
+                            {{point}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已使用激活码</div>
+                        <div class="layui-card-body">
+                            {{action_coin_total}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">未使用激活码数量</div>
+                        <div class="layui-card-body">
+                            {{action_coin}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已使用排单币</div>
+                        <div class="layui-card-body">
+                            {{buy_coin_total}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">未使用排单币数量</div>
+                        <div class="layui-card-body">
+                            {{buy_coin}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline" style="display: none;">
+                        <div class="layui-card-header">未使用排单币数量</div>
+                        <div class="layui-card-body">
+                            {{buy_coin}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">提供帮助统计</div>
+                <div class="layui-card-body">
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">总金额</div>
+                        <div class="layui-card-body">
+                            {{provide_sum}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已完成金额</div>
+                        <div class="layui-card-body">
+                            {{provide_all}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">进行中金额</div>
+                        <div class="layui-card-body">
+                            {{provide_only}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">未匹配金额</div>
+                        <div class="layui-card-body">
+                            {{provide_dis}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline" style="display: none">
+                        <div class="layui-card-header">未匹配金额</div>
+                        <div class="layui-card-body">
+                            {{provide_dis}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 20px; background-color: #F2F2F2;">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">接受帮助统计</div>
+                <div class="layui-card-body">
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">总金额</div>
+                        <div class="layui-card-body">
+                            {{receive_sum}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">已完成金额</div>
+                        <div class="layui-card-body">
+                            {{receive_all}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">进行中金额</div>
+                        <div class="layui-card-body">
+                            {{receive_only}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline">
+                        <div class="layui-card-header">未匹配金额</div>
+                        <div class="layui-card-body">
+                            {{receive_dis}}
+                        </div>
+                    </div>
+                    <div class="layui-card layui-inline" style="display: none">
+                        <div class="layui-card-header">未匹配金额</div>
+                        <div class="layui-card-body">
+                            {{receive_dis}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            login_ip: "{$login_ip}",
+            login_ip_ago: "{$login_ip_ago}",
+            new_persion: "{$new_persion}",
+            new_action_persion: "{$new_action_persion}",
+            new_provide: "{$new_provide}",
+            new_receive: "{$new_receive}",
+            persion: "{$persion}",
+            action_persion: "{$action_persion}",
+            disaction_persion: "{$disaction_persion}",
+            lock_persion: "{$lock_persion}",
+            c1_persion: "{$c1_persion}",
+            c2_persion: "{$c2_persion}",
+            c3_persion: "{$c3_persion}",
+            c4_persion: "{$c4_persion}",
+            c5_persion: "{$c5_persion}",
+            c6_persion: "{$c6_persion}",
+            pos_total: "{$pos_total}",
+            pos: "{$pos}",
+            pow: "{$pow}",
+            point_total: "{$point_total}",
+            point: "{$point}",
+            action_coin: "{$action_coin}",
+            action_coin_total: "{$action_coin_total}",
+            buy_coin_total: "{$buy_coin_total}",
+            buy_coin: "{$buy_coin}",
+            provide_sum: "{$provide_sum}",
+            provide_all: "{$provide_all}",
+            provide_only: "{$provide_only}",
+            provide_dis: "{$provide_dis}",
+            receive_sum: "{$receive_sum}",
+            receive_all: "{$receive_all}",
+            receive_only: "{$receive_only}",
+            receive_dis: "{$receive_dis}",
+        }
+    })
+</script>

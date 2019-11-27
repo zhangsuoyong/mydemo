@@ -1,0 +1,219 @@
+<div class="layui-form" lay-filter="form">
+  <div class="layui-form-item">
+    <div class="layui-inline">     
+      <div class="layui-input-inline">
+        <input class="layui-input" name="user" type="text" placeholder="用户名或账号或id">
+      </div>
+      <div class="layui-input-inline">
+        <input type="text" name="start" class="layui-input" placeholder="开始时间" id="start" autocomplete="off">
+      </div>
+      <div class="layui-input-inline">
+        <input type="text" name="end" class="layui-input" placeholder="结束时间" id="end" autocomplete="off">
+      </div>
+      <div class="layui-input-inline">        
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="*" >查询</button> 
+      </div>        
+    </div>
+  </div>
+</div>
+<div class="layui-card">
+  <div class="layui-card-header">
+    交易列表
+  </div>
+  <div class="layui-card-body">
+    <table class="layui-table" lay-size="sm">
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>购买需求id</th>
+            <th>参考号</th>
+            <th>购买用户账号</th>
+            <th>购买用户昵称</th>
+            <th>购买用户真实姓名</th>
+            <th>购买需求ID</th>
+            <th>出售用户账号</th>
+            <th>出售用户昵称</th>
+            <th>出售用户真实姓名</th>
+            <th>出售需求ID</th>
+            <th>数量</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody>
+          {volist name="list" id="vo"}
+            <tr>
+              <td>{$vo.id}</td>
+              <td>{$vo.buy_did}</td>
+              <td>{$vo.transaction_id}</td>
+              <td>{$vo.buy_user_user}</td>
+              <td>{$vo.buy_user_name}</td>
+              <td>{$vo.buy_user_real_name}</td>
+              <td>{$vo.buy_did}</td>
+              <td>{$vo.sell_user_user}</td>
+              <td>{$vo.sell_user_name}</td>
+              <td>{$vo.sell_user_real_name}</td>
+              <td>{$vo.sell_did}</td>
+              <td>{$vo.amount}</td>
+              <td>
+                {if condition="$vo.is_lock.value eq 2"}
+                    {switch name="vo.state.value" }
+                      {case value="4"}<font style="color: #cecece;">{$vo.state.msg}</font>{/case}
+                      {case value="1"}<font style="color: #FFB800;">{$vo.state.msg}</font>{/case}
+                      {case value="2"}<font style="color: #01AAED;">{$vo.state.msg}</font>{/case}
+                      {case value="3"}<font >{$vo.state.msg}</font>{/case}
+                    {/switch}  
+                  {else/}
+                    <font style="color: red;">{$vo.is_lock.msg}(申诉中)</font>
+                {/if}
+                
+              </td>
+              <td>{$vo.create_time}</td>
+              <td>{$vo.update_time}</td>
+              <td>
+                <div class="layui-btn-group">
+                  <button class="layui-btn layui-btn-sm" onClick="getMessage('{$vo.id}', 1, '聊天信息:'+'{$vo.id}')">
+                    <span>查看聊天记录</span>
+                  </button>
+                  <button class="layui-btn layui-btn-sm" onClick="openEvidenceMessage('{$vo.evidence_path}')">
+                    <span>查看凭证</span>
+                  </button>
+                  {if condition="$vo.state.value == 2 || $vo.state.value == 3"}
+                    <button class="layui-btn layui-btn-warm layui-btn-sm" onClick="cancelTransaction('{$vo.id}')">
+                      <span>取消交易</span>
+                    </button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm" onClick="releaseTransaction('{$vo.id}')">
+                      <span>放行交易</span>
+                    </button>
+                  {/if}
+                  {if condition="$vo.is_lock.value eq 1"}
+                    <button class="layui-btn layui-btn-sm" onClick="getMessage('{$vo.id}', 3, '申诉信息:'+'{$vo.id}')">
+                      <span>查看申诉信息</span>
+                    </button>
+                  {/if}
+                </div>
+              </td>
+            </tr>
+          {/volist}
+        </tbody>
+      </table>
+      {$list->render()}
+    </div>
+  </div>
+</div>
+<script>
+  page_load();
+
+  layui.use(['form', 'laydate'], function(){
+    let form = layui.form;
+    let laydate = layui.laydate;
+
+    laydate.render({
+      elem: '#start'
+      , type: 'datetime'
+    });
+    laydate.render({
+      elem: '#end'
+      , type: 'datetime'
+    });
+    form.val('form',{
+      'user':"{$user}",
+      'start':"{$start}",
+      'end':"{$end}"
+    });
+    form.render();
+    form.on('submit(*)', function(data){
+      let user = data.field.user;
+      let start = data.field.start;
+      let end = data.field.end;
+        reload('transaction_list.html?user='+user+'&start='+start+'&end='+end);
+      return false
+    });
+  });
+
+  function getMessage(transaction_id, type, title) {
+    $.post('{:url('demand/transaction_message_list')}',{
+      transaction_id, type
+    },function(data){
+      index = layer.open({
+        title: title,
+        type: 1,
+        area: ['800px', 'auto'],
+        fixed: true,
+        content: data,
+        skin: 'pop-up',
+        maxmin: true,
+        resizing:function(layro){
+          let h = layro.height();
+          layro.find('.layui-layer-content').css('height',h-42+'px');
+        }
+      });
+    });
+  } 
+
+  // 打开支付凭证信息
+  function openEvidenceMessage(image) {
+    if(image){
+      layer.photos({
+        photos: {
+          "title": "", //相册标题
+          "id": 123, //相册id
+          "start": 0, //初始显示的图片序号，默认0
+          "data": [   //相册包含的图片，数组格式
+            {
+              "alt": '支付凭证',
+              "pid": 666, //图片id
+              "src": image, //原图地址
+              "thumb": "" //缩略图地址
+            }
+          ]
+        } //格式见API文档手册页
+        ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+      });
+    }
+  }
+
+  // 取消交易
+  function cancelTransaction(transaction_id) {
+    layer.confirm('确定取消交易', {
+      btn: ['确定','取消'] //按钮
+    },function(){
+      $.post('{:url('demand/cancel_transaction')}',{
+        transaction_id
+      },function(data){
+        if(data.code == 1){
+          layer.msg(data.msg);
+          refresh();
+        }else{
+          layer.msg(data.msg);
+        }        
+      });
+    });
+  }
+
+  // 放行交易
+  function releaseTransaction(transaction_id) {
+    layer.confirm('确定放行交易', {
+      btn: ['确定','取消'] //按钮
+    },function(){
+      $.post('{:url('demand/release_transaction')}',{
+        transaction_id
+      },function(data){
+        if(data.code == 1){
+          layer.msg(data.msg);
+          refresh();
+        }else{
+          layer.msg(data.msg);
+        }        
+      });
+    });
+  }
+</script>

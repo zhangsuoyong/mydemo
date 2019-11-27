@@ -1,0 +1,98 @@
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <!-- <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('User/index')}');">用户列表</a> -->
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();">公告列表</a>
+        </div>
+    </fieldset>
+    <!--  <div class="layui-card-header">
+
+     </div> -->
+    <div class="layui-card-body">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="keyword" type="text" required lay-verify="required"
+                               value="{$keyword ? $keyword : '';}" placeholder="ID/标题">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+                    </div>
+                </div>
+                <span class="pull-right">
+            <button class="layui-btn layui-btn-sm"
+                    onclick="add('{:url('/tkfadmin/notice/add')}','公告添加','Notice','add','{:url('base/is_node')}')">
+              <i class="layui-icon">&#xe608;</i> 公告添加
+            </button>
+          </span>
+            </div>
+        </div>
+        <table class="layui-table" lay-size="sm">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>标题</td>
+                <td>内容</td>
+                <td>状态</td>
+                <td>创建时间</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {if count($list) gt 0}
+            {volist name="list" id="vo"}
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.title}</td>
+                <td>{$vo.content}</td>
+                <td>
+                    <a onclick="config('{:url('state')}','{$vo.id}','{$vo.state.value}','公告状态')"
+                       href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">{$vo.state.msg}</a>
+                </td>
+                <td>{$vo.create_time}</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="edit('{:url('tkfadmin/notice/edit')}','{$vo.id}','编辑公告')">
+                        <i class="layui-icon">&#xe642;</i>
+                    </button>
+                    {if $vo.is_home eq 2}
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" title="在首页展示" onclick="config('{:url('/tkfadmin/notice/on_home')}','{$vo.id}','','首页展示')">
+                        <i class="layui-icon" >&#xe68e;</i>
+                    </button>
+                    {/if}
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" title="删除" onclick="del('{:url('/tkfadmin/notice/del')}','{$vo.id}')">
+                        <i class="layui-icon" style="color: red">&#xe640;</i>
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {else}
+            <tr>
+                <td colspan="11" style="text-align: center">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        {$list->render()}
+    </div>
+</div>
+<script type="text/javascript">
+    page_load()
+    layui.use('form', function () {
+        let form = layui.form;
+        form.on('submit(selectsub)', function (data) {
+            let user = $('input[name=keyword]').val();
+            if (user != '') {
+                reload('/tkfadmin/notice/index.html?keyword=' + user);
+            }
+            return false;
+        });
+    });
+</script>

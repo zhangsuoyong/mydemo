@@ -1,0 +1,120 @@
+<div class="layui-card">
+    <fieldset class="layui-elem-field">
+        <div class="layui-field-box">
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="reload('{:url('Index/home')}');">首页</a>&raquo;
+            <a class="layui-btn-sm" style="cursor:pointer;" onclick="refresh();">资产日志</a>
+        </div>
+    </fieldset>
+    <!--  <div class="layui-card-header">
+
+     </div> -->
+    <div class="layui-card-body">
+        <div class="layui-form" lay-filter="form">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <input type="text" name="id" placeholder="用户id" autocomplete="off"
+                           class="layui-form-mid layui-input ">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" name="user" placeholder="用户账号" autocomplete="off"
+                           class="layui-form-mid layui-input ">
+                </div>
+                <div class="layui-input-inline" autocomplete="off">
+                    <select name="type">
+                        <option value="1">自由资产</option>
+                        <option value="4">互助币</option>
+                        <option value="5">激活码</option>
+                        <option value="3">分享奖励</option>
+                        <option value="6">通证</option>
+                        <option value="7">天使券</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" name="start" class="layui-input" placeholder="开始时间" id="start" autocomplete="off">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" name="end" class="layui-input" placeholder="结束时间" id="end" autocomplete="off">
+                </div>
+                <div class="layui-input-inline">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="selectsub">查询</button>
+                </div>
+            </div>
+        </div>
+        <table class="layui-table" lay-size="sm" style="white-space: nowrap">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <td>用户id</td>
+                <td>用户账号</td>
+                <td>用户昵称</td>
+                <td>用户真实姓名</td>
+                <td>类型</td>
+                <td>数量</td>
+                <td>描述</td>
+                <td>时间</td>
+            </tr>
+            </thead>
+            <tbody>
+            {if count($list)>0}
+            {volist name="list" id="vo"}
+            <tr>
+                <td>{$vo.uid}</td>
+                <td>{$vo.user}</td>
+                <td>{$vo.nickname}</td>
+                <td>{$vo.real_name}</td>
+                <td>{$vo.type.msg}</td>
+                <td>{$vo.sign}{$vo.num}</td>
+                <td>{$vo.msg}</td>
+                <td>{$vo.create_time}</td>
+            </tr>
+            {/volist}
+            {else}
+            <tr>
+                <td colspan="30" style="text-align: center">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        {$list->render()}
+    </div>
+</div>
+<script type="text/javascript">
+    page_load();
+    layui.use(['form', 'laydate'], function () {
+        let form = layui.form;
+        laydate = layui.laydate;
+        form.render();
+        laydate.render({
+            elem: '#start'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#end'
+            , type: 'datetime'
+        });
+
+        form.val('form', {
+            'id': "{$id}",
+            'type': "{$type}",
+            'start': "{$start}",
+            'end': "{$end}",
+            'user':"{$user}"
+        });
+
+        form.on('submit(selectsub)', function (data) {
+            let id = data.field.id;
+            let type = data.field.type;
+            let start = data.field.start;
+            let end = data.field.end;
+            let user = data.field.user;
+            reload('/tkfadmin/capital/detail.html?id=' + id + '&type=' + type + '&start=' + start + '&end=' + end+'&user='+user);
+            return false;
+        });
+
+    });
+</script>

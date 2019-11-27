@@ -1,0 +1,35 @@
+{extend name="public:base"}
+{block name="title"}登录{/block}
+{block name="head"}
+  <link rel="stylesheet" href="/static/admin/css/login.css">
+{/block}
+{block name="content"}
+
+<div id="login">
+  <div id="title">
+    <h1><b>tkfAdmin</b></h1>
+  </div>
+  <div id="content">
+    <form class="layui-form" method="post" action="">
+      <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+          <input type="text" name="user" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+          <input type="password" name="pass" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" lay-submit lay-filter="formDemo">登录</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{/block}
